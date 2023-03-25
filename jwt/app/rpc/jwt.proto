@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package jwt;
+
+option go_package = "./Jwt";
+
+service JwtRpc {
+  rpc createToken(createTokenReq)returns(createTokenResp){}
+  rpc parseToken(parseTokenReq)returns(parseTokenResp){}
+  rpc IsValidToken(isValidTokenReq)returns(isValidTokenResp){}
+}
+
+message createTokenReq {
+  string UserID = 1;
+  int64 AccessExpire = 2;
+}
+
+message createTokenResp {
+  string Token = 1;
+}
+
+message parseTokenReq{
+  string token = 1;
+}
+
+message parseTokenResp {
+  string UserID = 1;
+  int64 AccessExpire = 2;
+}
+
+message isValidTokenReq{
+  string token = 1;
+}
+
+message isValidTokenResp {
+
+}
+

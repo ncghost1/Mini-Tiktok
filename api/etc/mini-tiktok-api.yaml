@@ -1,0 +1,52 @@
+Name: mini-tiktok-api
+Host: 0.0.0.0
+Port: 8888
+Timeout: 60000 # 请求超时时间为 60s （投稿需要上传文件所以调大一些）
+
+# http 报文最大长度设为 128M（因为投稿视频通过 http 所以需要调高上限）
+# 你问我为什么客户端不先上传 oss，因为客户端不是我写的呀！我只是完成接口任务罢了~
+MaxBytes: 134217728
+
+# JWT 设置
+JwtConfig:
+  AccessExpire: 86400 # 过期时间
+
+# JWT RPC 服务
+JwtRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379 # Etcd 地址
+    Key: jwt.rpc # 服务对应 key，用于服务发现
+
+# User RPC 服务
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+
+# 阿里云 OSS 设置
+AliyunOss:
+  Endpoint: oss-cn-beijing.aliyuncs.com # 阿里云 OSS 访问域名
+  AccessKeyId: # AccessKey
+  AccessKeySecret: # AccessKeySecret，与上边的都是用于授权的
+  VideoBucket: Mini-Tiktok-Bucket # 视频所在 bucket 名称
+  VideoPath: Mini-Tiktok/PendingVideo/ # 需要转码的原视频上传路径
+
+# Kafka 设置
+KafkaConfig:
+  Host: 127.0.0.1:9092 # URI 地址
+  Topic: publishService # 分区主题
+  BatchTimeout: 100 # 生产者发送消息至 kafka 之前最多积压多久的消息，单位 ms
+  BatchSize: 100 # 发送之前最多积压多少条消息
+  BatchBytes: 1048576 # 发送之前最多积压的消息占用字节数
+
+# User RPC 服务
+VideoRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: video.rpc
+
+# 一次获取 Feed （视频推送）的视频信息数量
+FeedLimit: 30

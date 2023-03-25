@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package video;
+
+option go_package = "./video";
+
+service VideoRpc {
+  rpc GetPublishList(PublishListReq)returns(PublishListResp){}
+  rpc GetFeed(FeedReq)returns(FeedResp){}
+  rpc CommentAction(CommentReq) returns (CommentResp) {}
+  rpc GetCommentList(CommentListReq) returns (CommentListResp) {}
+  rpc FavoriteAction(FavoriteReq) returns (FavoriteResp) {}
+  rpc GetFavoriteList(FavoriteListReq) returns (FavoriteListResp) {}
+}
+
+
+message PublishListReq {
+  string UserID = 1;
+  string QueryId = 2;
+}
+
+message PublishListResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Video VideoList = 3;
+}
+
+message FeedReq {
+  string UserId = 1;
+  int64 LatestTime = 2;
+  int64 Limit = 3;
+}
+
+message FeedResp {
+  int64 NextTime = 1;
+  string StatusCode = 2;
+  string StatusMsg = 3;
+  repeated Video VideoList = 4;
+}
+
+message Video  {
+  User  Author = 1;
+  int64   CommentCount = 2;
+  string  CoverURL = 3;
+  int64   FavoriteCount = 4;
+  uint64   ID = 5;
+  bool    IsFavorite = 6;
+  string  PlayURL = 7;
+  string  Title = 8;
+}
+
+message User  {
+  int64  FollowCount = 1;
+  int64  FollowerCount = 2;
+  uint64   ID = 3;
+  bool  IsFollow = 4;
+  string  Name = 5;
+}
+
+message Comment {
+  string Content = 1;
+  string CreateDate = 2;
+  uint64 ID = 3;
+  User User = 4;
+}
+
+message CommentReq {
+  string VideoId = 1;
+  string UserId = 2;
+  string ActionType = 3;
+  string Content = 4;
+  string CommentId = 5;
+}
+
+message CommentResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  Comment Comment = 3;
+}
+
+message CommentListReq {
+  string VideoId = 1;
+  string UserId = 2;
+}
+
+message CommentListResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Comment CommentList = 3;
+}
+
+message FavoriteReq {
+  string VideoId = 1;
+  string UserId = 2;
+  string ActionType = 3;
+}
+
+message FavoriteResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+}
+
+message FavoriteListReq {
+  string UserId = 1;
+  string QueryUserId = 2;
+}
+
+message FavoriteListResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  repeated Video VideoList = 3;
+}

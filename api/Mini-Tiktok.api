@@ -1,0 +1,213 @@
+syntax = "v1"
+
+type (
+    GetUserReq {
+        UserID string `form:"user_id"` // 用户id
+        Token string `form:"token"`    // 用户鉴权token
+    }
+
+    RegisterReq {
+        Username string `form:"username"` // 用户名
+        Password string `form:"password"` // 密码
+    }
+
+    LoginReq {
+        Username string `form:"username"` // 用户名
+        Password string `form:"password"` // 密码
+    }
+
+    PublishReq {
+                                    // Data  multipart.File `form:"data"` 视频数据，但是 gozero 竟然不支持这种文件数据类型，只能在代码中自己取出了...
+        Token string `form:"token"` // 用户鉴权 token
+        Title string `form:"title"` // 视频标题
+    }
+
+    FeedReq {
+        LatestTime *string `form:"latest_time,optional"` // 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
+        Token *string `form:"token,optional"`            // 用户登录状态下设置
+    }
+
+    PublishListReq {
+        Token string `form:"token"`    // 用户鉴权 token
+        UserId string `form:"user_id"` // 用户 id
+    }
+
+    FavoriteReq {
+        Token string `form:"token"`            // 用户鉴权 token
+        VideoId string `form:"video_id"`       // 视频id
+        ActionType string `form:"action_type"` // 1-点赞，2-取消点赞
+    }
+
+    FavoriteListReq {
+        Token string `form:"token"`    // 用户鉴权 token
+        UserId string `form:"user_id"` // 用户 id
+    }
+
+    CommentReq {
+        Token string `form:"token"`                        // 用户鉴权 token
+        VideoId string `form:"video_id"`                   // 视频id
+        ActionType string `form:"action_type"`             // 1-发布评论，2-删除评论
+        CommentText *string `form:"comment_text,optional"` // 用户填写的评论内容，在action_type=1的时候使用
+        CommentId *string `form:"comment_id,optional"`     // 要删除的评论id，在action_type=2的时候使用
+    }
+
+    CommentListReq {
+        Token string `form:"token"`      // 用户鉴权 token
+        VideoId string `form:"video_id"` // 视频id
+    }
+
+    FollowActionReq {
+        Token string `form:"token"`            // 用户鉴权 token
+        ToUserId string `form:"to_user_id"`    // 对方用户id
+        ActionType string `form:"action_type"` // 1-关注，2-取消关注
+    }
+
+    FollowListReq {
+        Token string `form:"token"`    // 用户鉴权 token
+        UserId string `form:"user_id"` // 用户id
+    }
+
+    FollowerListReq {
+        Token string `form:"token"`    // 用户鉴权 token
+        UserId string `form:"user_id"` // 用户id
+    }
+)
+
+type (
+    Response {
+        StatusCode string `json:"status_code"`          // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg,omitempty"`  // 返回状态描述
+    }
+
+    User {
+        FollowCount int64 `json:"follow_count"`     // 关注总数
+        FollowerCount int64 `json:"follower_count"` // 粉丝总数
+        ID uint64 `json:"id"`                       // 用户id
+        IsFollow bool `json:"is_follow"`            // true-已关注，false-未关注
+        Name string `json:"name"`                   // 用户名称
+    }
+
+    Video {
+        Author User `json:"author"`                 // 视频作者信息
+        CommentCount int64 `json:"comment_count"`   // 视频的评论总数
+        CoverURL string `json:"cover_url"`          // 视频封面地址
+        FavoriteCount int64 `json:"favorite_count"` // 视频的点赞总数
+        ID uint64 `json:"id"`                       // 视频唯一标识
+        IsFavorite bool `json:"is_favorite"`        // true-已点赞，false-未点赞
+        PlayURL string `json:"play_url"`            // 视频播放地址
+        Title string `json:"title"`                 // 视频标题
+    }
+
+    GetUserResp {
+        Response
+        User *User `json:"user"` // 用户信息
+    }
+
+    RegisterResp {
+        Response
+        Token *string `json:"token"`   // 用户鉴权token
+        UserID uint64 `json:"user_id"` // 用户id
+    }
+
+    LoginResp {
+        Response
+        Token *string `json:"token"`             // 用户鉴权token
+        UserID uint64 `json:"user_id,omitempty"` // 用户id
+    }
+
+    PublishResp {
+        Response
+    }
+
+    Comment {
+        Content string `json:"content"`        // 评论内容
+        CreateDate string `json:"create_date"` // 评论发布日期，格式 mm-dd
+        ID uint64 `json:"id"`                  // 评论id
+        User User `json:"user"`                // 评论用户信息
+    }
+
+    FeedResp {
+        Response
+        NextTime *int64 `json:"next_time"`    // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+        VideoList []Video `json:"video_list"` // 视频列表
+    }
+
+    PublishListResp {
+        Response
+        VideoList []Video `json:"video_list"` // 用户发布的视频列表
+    }
+
+    FavoriteResp {
+        Response
+    }
+
+    FavoriteListResp {
+        Response
+        VideoList []Video `json:"video_list"` // 用户发布的视频列表
+    }
+
+    CommentResp {
+        Response
+        Comment *Comment `json:"comment"` // 评论成功返回评论内容，不需要重新拉取整个列表
+    }
+
+    CommentListResp {
+        Response
+        CommentList []Comment `json:"comment_list"` // 评论列表
+    }
+
+    FollowActionResp {
+        Response
+    }
+
+    FollowListResp {
+        Response
+        UserList []User `json:"user_list"`
+    }
+
+    FollowerListResp {
+        Response
+        UserList []User `json:"user_list"`
+    }
+)
+
+service mini-tiktok-api {
+    @handler GetUser
+    get /douyin/user (GetUserReq) returns (GetUserResp)
+
+    @handler RegisterUser
+    post /douyin/user/register (RegisterReq) returns (RegisterResp)
+
+    @handler LoginUser
+    post /douyin/user/login (LoginReq) returns (LoginResp)
+
+    @handler PublishAction
+    post /douyin/publish/action (PublishReq) returns (PublishResp)
+
+    @handler GetPublishList
+    get /douyin/publish/list (PublishListReq) returns (PublishListResp)
+
+    @handler Feed
+    get /douyin/feed (FeedReq) returns (FeedResp)
+
+    @handler favorite
+    post /douyin/favorite/action (FavoriteReq) returns (FavoriteResp)
+
+    @handler favoriteList
+    get /douyin/favorite/list (FavoriteListReq) returns (FavoriteListResp)
+
+    @handler comment
+    post /douyin/comment/action (CommentReq) returns (CommentResp)
+
+    @handler commentList
+    get /douyin/comment/list (CommentListReq) returns (CommentListResp)
+
+    @handler FollowAction
+    post /douyin/relation/action (FollowActionReq) returns (FollowActionResp)
+
+    @handler FollowList
+    get /douyin/relation/follow/list (FollowListReq) returns (FollowListResp)
+
+    @handler FollowerList
+    get /douyin/relation/follower/list (FollowerListReq) returns (FollowerListResp)
+}

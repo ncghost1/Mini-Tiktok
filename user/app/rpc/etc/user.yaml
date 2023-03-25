@@ -1,0 +1,41 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:9701
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379 # Etcd 地址
+  Key: user.rpc # 服务对应 key，用于服务注册
+
+# Gorm DB 设置
+DbConfig:
+  path: localhost
+  port: 3306
+  Config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: douyin
+  username:
+  password:
+  max-idle-conns: 20 # 空闲中的最大连接数
+  max-open-conns: 50 # 打开到数据库的最大连接数
+
+# Redis 设置
+RedisConfig:
+  Host: 127.0.0.1
+  Port: 6379
+  Auth: false # 是否使用用户名密码认证
+  Username:
+  Password:
+  MaxIdle: 20 # 空闲中的最大连接数
+  Active: 20 # 最大打开连接数
+  IdleTimeout: 60 # 空闲连接超时时间，超时后自动释放该连接，设为 0 即空闲连接不会超时关闭
+
+# Redis 缓存设置
+CacheConfig:
+  FOLLOW_CACHE_TTL: 3600 # 缓存过期时间：1小时，用于淘汰冷门用户数据
+  FOLLOW_COUNT_CACHE_TTL: 3600 # 缓存过期时间：1小时，用于淘汰冷门用户数据
+  FOLLOW_COUNT_THRESHOLD: 100000 # 关注或粉丝计数值超过该阈值时将不会过期
+  USER_CACHE_TTL: 43200 # 缓存过期时间：12小时，用于淘汰冷门用户数据
+  USER_CACHE_INIT_SIZE: 100000 # 缓存预热时，需要初始化的用户信息数量
+  FOLLOWLIST_MAX_CACHE_SIZE: 30 # 用户最新关注列表的缓存数量
+  FOLLOWERLIST_MAX_CACHE_SIZE: 30  # 视频最新粉丝列表的缓存数量
+
+WorkerId: 1 # 雪花算法机器 id，不同机器不可重复
+

@@ -1,0 +1,45 @@
+# Kafka 设置
+KafkaConfig:
+  Host: 127.0.0.1:9092 # URI 地址
+  Topic: publishService # 主题
+  GroupId:  # 消费组
+  MinBytes: 1024 #
+  MaxBytes: 1048576
+
+# Gorm DB 设置
+DbConfig:
+  path: localhost
+  port: 3306
+  Config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: douyin
+  username:
+  password:
+  max-idle-conns: 20 # 空闲中的最大连接数
+  max-open-conns: 50 # 打开到数据库的最大连接数
+
+# Redis 设置
+RedisConfig:
+  Host: 127.0.0.1
+  Port: 6379
+  Auth: false # 是否使用用户名密码认证
+  Username:
+  Password:
+  MaxIdle: 20  # 空闲中的最大连接数
+  Active: 20 # 最大打开连接数
+  IdleTimeout: 60 # 空闲连接超时时间，超时后自动释放该连接，设为 0 即空闲连接不会超时关闭
+
+# 阿里云设置
+AliyunOss:
+  Endpoint: oss-cn-beijing.aliyuncs.com
+  AccessKeyId:
+  AccessKeySecret:
+  Bucket: Mini-Tiktok-Bucket
+  VideoPath: Mini-Tiktok/Video/ # 转码后上传视频路径（对于 bucket 的路径）
+  CoverPath: Mini-Tiktok/Cover/ # 转码后上传视频封面路径（对于 bucket 的路径）
+  UrlPrefix: https://Mini-Tiktok-Bucket.oss-cn-beijing.aliyuncs.com/ # url 前缀，用于拼接 bucket 和 VideoPath 或 CoverPath 得到文件 url
+
+WorkerId: 1 # 雪花算法机器 id，不同机器不可重复
+
+cacheConfig:
+  VIDEO_CACHE_TTL: 60 * 5 # 缓存过期时间：5 分钟，用于淘汰冷门视频数据
+  FEED_MAX_CACHE_SIZE: 3000  # Feed 视频信息的缓存数量

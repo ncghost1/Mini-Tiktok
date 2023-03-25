@@ -1,0 +1,55 @@
+Name: video.rpc
+ListenOn: 0.0.0.0:9703
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: video.rpc
+
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+
+KafkaConfig:
+  Host: 127.0.0.1:9092
+  Topic: videoService
+  BatchTimeout: 100 # 生产者发送消息至 kafka 之前最多积压多久的消息，单位 ms
+  BatchSize: 100 # 发送之前最多积压多少条消息
+  BatchBytes: 1048576 # 发送之前最多积压的消息占用字节数
+
+# DB 设置
+DbConfig:
+  path: localhost
+  port: 3306
+  Config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: douyin
+  username:
+  password:
+  max-idle-conns: 20
+  max-open-conns: 50
+
+# Redis 设置
+RedisConfig:
+  Host: 127.0.0.1
+  Port: 6379
+  Auth: false
+  Username:
+  Password:
+  MaxIdle: 20
+  Active: 20
+  IdleTimeout: 60 # 空闲连接超时时间，超时后自动释放该连接，设为 0 即空闲连接不会超时关闭
+
+
+# Redis 缓存设置
+CacheConfig:
+  VIDEO_CACHE_TTL: 43200 # 缓存过期时间：12小时，用于淘汰冷门视频数据
+  FAVORITE_CACHE_TTL: 43200  # 缓存过期时间：12小时，用于淘汰冷门视频点赞数据
+  FAVORITE_DEL_CACHE_TTL: 300 # 缓存过期时间：5分钟，用于淘汰5分钟未访问的用户最近取消点赞视频数据
+  COMMENT_CACHE_TTL: 43200 # 缓存过期时间：12小时，用于淘汰冷门视频评论数据
+  FEED_MAX_CACHE_SIZE: 3000  # Feed 视频信息的缓存数量，请使用 10 倍数，否则 lua 脚本会报错
+  VIDEO_MAX_CACHE_SIZE: 30 # 用户最近发布视频的缓存数量
+  VIDEO_FAVORITE_MAX_CACHE_SIZE: 30 # 用户最新点赞视频的缓存数量
+  VIDEO_COMMENT_MAX_CACHE_SIZE: 30  # 视频最新评论的缓存数量
+
+WorkerId: 1 # 雪花算法机器 id，不同机器不可重复

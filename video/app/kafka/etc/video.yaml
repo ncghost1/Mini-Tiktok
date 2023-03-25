@@ -1,0 +1,29 @@
+KafkaConfig:
+  Host: 127.0.0.1:9092
+  Topic: videoService
+  MinBytes: 1024 # 消费者接收的最小批量消息字节数。当没有足够的数据来满足定义的最小值时，可能会导致延迟消费。
+  MaxBytes: 1048576 # 消费者接收的最大批量消息字节数。当消息超过该最大值时将会截断，所以需要设一个足够高的值来满足最大消息大小。
+
+# DB 设置
+DbConfig:
+  path: localhost
+  port: 3306
+  Config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: douyin
+  username:
+  password:
+  max-idle-conns: 20
+  max-open-conns: 50
+
+# Redis 设置
+RedisConfig:
+  Host: 127.0.0.1
+  Port: 6379
+  Auth: false
+  Username:
+  Password:
+  MaxIdle: 20
+  Active: 20
+  IdleTimeout: 60 # 空闲连接超时时间，超时后自动释放该连接，设为 0 即空闲连接不会超时关闭
+
+WorkerId: 1 # 雪花算法机器 id，不同机器不可重复

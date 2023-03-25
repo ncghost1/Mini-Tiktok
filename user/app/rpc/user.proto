@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./user";
+
+service UserRpc {
+  rpc Register(registerReq)returns(registerResp){}
+  rpc Login(loginReq)returns(loginResp){}
+  rpc GetUser(GetUserReq)returns(GetUserResp){}
+  rpc FollowAction(FollowActionReq)returns(FollowActionResp){}
+  rpc FollowList(FollowListReq)returns(FollowListResp){}
+  rpc FollowerList(FollowerListReq)returns(FollowerListResp){}
+}
+
+message registerReq {
+  string Username = 1;
+  string Password = 2;
+}
+
+message registerResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  uint64 UserID = 3;
+}
+
+message loginReq{
+  string username = 1;
+  string password = 2;
+}
+
+message loginResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  uint64 UserID = 3;
+}
+
+message GetUserReq {
+  string UserID = 1;
+  string QueryID = 2;
+}
+
+message User {
+  int64 FollowCount = 1;
+  int64 FollowerCount = 2;
+  uint64 ID = 3;
+  bool IsFollow = 4;
+  string Name = 5;
+}
+
+message GetUserResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  User User = 3;
+}
+
+message FollowActionReq {
+  string UserId = 1;
+  string ToUserId = 2;
+  string action_type = 3;
+}
+
+message FollowActionResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+}
+
+message FollowListReq {
+  string UserId = 1;
+  string ToUserId = 2;
+}
+
+message FollowListResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  repeated User UserList = 3;
+}
+
+message FollowerListReq {
+  string UserId = 1;
+  string ToUserId = 2;
+}
+
+message FollowerListResp {
+  string StatusCode = 1;
+  string StatusMsg = 2;
+  repeated User UserList = 3;
+}

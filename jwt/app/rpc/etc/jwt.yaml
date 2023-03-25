@@ -1,0 +1,9 @@
+Name: jwt.rpc
+ListenOn: 0.0.0.0:9702
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379 # Etcd 地址
+  Key: jwt.rpc # 服务对应 key，用于服务注册
+
+JwtConfig:
+  AccessSecret: www.eririspace.cn # jwt 密钥
