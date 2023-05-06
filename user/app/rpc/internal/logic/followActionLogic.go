@@ -58,7 +58,7 @@ func (l *FollowActionLogic) FollowAction(in *user.FollowActionReq) (*user.Follow
 			return nil, err
 		}
 
-		err = l.svcCtx.Db.Model(model.User{}).Where(&model.User{Id: toUserId}).Take(&model.User{}).Error
+		err = l.svcCtx.Db.Model(model.User{}).Where(&model.User{Id: userid}).Take(&model.User{}).Error
 		if err != nil {
 			if err == gorm.ErrRecordNotFound { // 用户不存在
 				return &user.FollowActionResp{
