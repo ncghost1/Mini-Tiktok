@@ -26,11 +26,7 @@ func NewRegisterUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Regi
 }
 
 func (l *RegisterUserLogic) RegisterUser(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	r, err := l.svcCtx.UserRpc.Register(l.ctx, &user.RegisterReq{
-		Username: req.Username,
-		Password: req.Password,
-	})
-
+	
 	// 用户名和密码长度不能超过 32 字符（不知道为什么客户端没做这种校验）
 	if len(req.Username) > 32 || len(req.Password) > 32 {
 		return &types.RegisterResp{
@@ -42,6 +38,11 @@ func (l *RegisterUserLogic) RegisterUser(req *types.RegisterReq) (resp *types.Re
 			UserID: 0,
 		}, err
 	}
+	
+	r, err := l.svcCtx.UserRpc.Register(l.ctx, &user.RegisterReq{
+		Username: req.Username,
+		Password: req.Password,
+	})
 
 	if err != nil {
 		return nil, err
