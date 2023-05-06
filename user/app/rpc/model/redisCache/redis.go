@@ -194,11 +194,13 @@ func (p *RedisPool) GetUsername(conn redis.Conn, userid uint64) (string, error) 
 
 func (p *RedisPool) SetUserInfo(conn redis.Conn, userid uint64, username string, followCount int64, followerCount int64) error {
 	_, err := conn.Do("EVAL",
-		"redis.call('HMSET', KEYS[1], ARGV[4], ARGV[1], ARGV[5], ARGV[2], ARGV[6], ARGV[3]); "+
-			"if (tonumber(ARGV[2]) >= tonumber(ARGV[8]) or tonumber(ARGV[3]) >= tonumber(ARGV[8])) then "+
-			"redis.call('PERSIST', KEYS[1]); "+
-			"else redis.call('EXPIRE', KEYS[1], ARGV[7]); end; "+
-			"return nil;",
+		"redis.call('HSETNX', KEYS[1], ARGV[4], ARGV[1]; "+
+		"redis.call('HSETNX', KEYS[1], ARGV[5], ARGV[2]);"+
+		"redis.call('HSETNX', KEYS[1], ARGV[6], ARGV[3]);"+
+		"if (tonumber(ARGV[2]) >= tonumber(ARGV[8]) or tonumber(ARGV[3]) >= tonumber(ARGV[8])) then "+
+		"redis.call('PERSIST', KEYS[1]); "+
+		"else redis.call('EXPIRE', KEYS[1], ARGV[7]); end; "+
+		"return nil;",
 		1, model.User{}.CacheKey(userid), username, followCount, followerCount,
 		model.UsernameField, model.FollowCountField, model.FollowerCountField,
 		cacheConfig.USER_CACHE_TTL, cacheConfig.FOLLOW_COUNT_THRESHOLD)
