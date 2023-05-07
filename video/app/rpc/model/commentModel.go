@@ -30,7 +30,7 @@ func (Comment) CacheKey(commentId uint64) string {
 }
 
 // IdCacheKey 返回 Comment（视频评论id）对应的缓存 key 名称，
-// Comment Id 缓存类型为 zset 类型，key: VideoId:CommentId:ZSET:{视频id},members:{评论id} score: 点赞时间
+// Comment Id 缓存类型为 zset 类型，key: VideoId:CommentId:ZSET:{视频id},members:{评论id} score: 创建时间
 // 为视频维护一个最新的 30 条评论 id 的有序集合，
 // 我们为每个缓存设置默认 12 小时的过期时间，用于淘汰冷门视频的评论缓存
 func (Comment) IdCacheKey(videoId uint64) string {
